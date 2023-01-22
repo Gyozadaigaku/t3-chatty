@@ -10,6 +10,9 @@ const Home: NextPage = () => {
   const hello = api.example.hello.useQuery({ text: "from tRPC" });
 
   const [formContent, setFormContent] = useState([]);
+  const [onEdit, setOnEdit] = useState(false);
+  const [editedField, setEditedField] = useState("");
+
   const addQuestion = () => {
     const field = {
       name: `question_${formContent.length}`,
@@ -18,6 +21,15 @@ const Home: NextPage = () => {
       list: [],
     };
     setFormContent([...formContent, field]);
+  };
+
+  const editField = (fieldName, fieldLabel) => {
+    const formFields = [...formContent];
+    const fieldIndex = formFields.findIndex((f) => f.name === fieldName);
+    if (fieldIndex > -1) {
+      formFields[fieldIndex].label = fieldLabel;
+      setFormContent(formFields);
+    }
   };
 
   return (
@@ -44,7 +56,28 @@ const Home: NextPage = () => {
                   <div key={field.name}>
                     <div className="flex items-center justify-between space-y-2">
                       <div className="block text-sm font-medium capitalize text-gray-700">
-                        <input type="text" value={field.label} />
+                        {onEdit && editedField === field.name ? (
+                          <input
+                            type="text"
+                            value={field.label}
+                            onChange={(e) =>
+                              editField(field.name, e.target.value)
+                            }
+                            onBlur={() => {
+                              setOnEdit(false);
+                              setEditedField("");
+                            }}
+                          />
+                        ) : (
+                          <label
+                            onClick={() => {
+                              setOnEdit(true);
+                              setEditedField(field.name);
+                            }}
+                          >
+                            {field.label}
+                          </label>
+                        )}
                       </div>
                       <div>
                         <select>
