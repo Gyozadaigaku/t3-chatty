@@ -12,6 +12,7 @@ const Home: NextPage = () => {
   const [formContent, setFormContent] = useState([]);
   const [onEdit, setOnEdit] = useState(false);
   const [editedField, setEditedField] = useState("");
+  const [textField, setTextField] = useState("");
 
   const addQuestion = () => {
     const field = {
@@ -38,6 +39,18 @@ const Home: NextPage = () => {
     if (fieldIndex > -1) {
       formFields[fieldIndex].question_type = fieldLabel;
       setFormContent(formFields);
+    }
+  };
+
+  const addFieldOption = (fieldName, option) => {
+    const formFields = [...formContent];
+    const fieldIndex = formFields.findIndex((f) => f.name === fieldName);
+    if (fieldIndex > -1) {
+      if (option && option != "") {
+        formFields[fieldIndex].list.push(option);
+        setFormContent(formFields);
+        setTextField("");
+      }
     }
   };
 
@@ -128,10 +141,17 @@ const Home: NextPage = () => {
                           <div className="space-between flex">
                             <input
                               type="text"
+                              onChange={(e) => setTextField(e.target.value)}
+                              value={textField}
                               placeholder="Add an option"
                               className="flex-1"
                             />
-                            <button className="block bg-indigo-700 px-4 text-white hover:bg-indigo-900">
+                            <button
+                              className="block bg-indigo-700 px-4 text-white hover:bg-indigo-900"
+                              onClick={() =>
+                                addFieldOption(field.name, textField)
+                              }
+                            >
                               Add
                             </button>
                           </div>
