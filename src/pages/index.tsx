@@ -32,6 +32,15 @@ const Home: NextPage = () => {
     }
   };
 
+  const editFieldType = (fieldName, fieldLabel) => {
+    const formFields = [...formContent];
+    const fieldIndex = formFields.findIndex((f) => f.name === fieldName);
+    if (fieldIndex > -1) {
+      formFields[fieldIndex].question_type = fieldLabel;
+      setFormContent(formFields);
+    }
+  };
+
   return (
     <>
       <Head>
@@ -80,7 +89,11 @@ const Home: NextPage = () => {
                         )}
                       </div>
                       <div>
-                        <select>
+                        <select
+                          onChange={(e) =>
+                            editFieldType(field.name, e.target.value)
+                          }
+                        >
                           <option value="short_answer">Short Answer</option>
                           <option value="paragraph">Paragraph</option>
                           <option value="multichoice">Multichoice</option>
