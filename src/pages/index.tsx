@@ -39,8 +39,61 @@ const Home: NextPage = () => {
               <h2 className="text-lg">Untitled Form</h2>
             </div>
             <div className="my-10 rounded-md bg-white p-5 shadow-lg">
-              {formContent.map((field, index) => {
-                return <div key={index}>Test</div>;
+              {formContent.map((field) => {
+                return (
+                  <div key={field.name}>
+                    <div className="flex items-center justify-between space-y-2">
+                      <div className="block text-sm font-medium capitalize text-gray-700">
+                        <input type="text" value={field.label} />
+                      </div>
+                      <div>
+                        <select>
+                          <option value="short_answer">Short Answer</option>
+                          <option value="paragraph">Paragraph</option>
+                          <option value="multichoice">Multichoice</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div className="my-4">
+                      {field.question_type == "short_answer" && (
+                        <input
+                          type="text"
+                          className="block h-10 w-full rounded-md px-5 shadow-sm"
+                          placeholder={field.label}
+                        />
+                      )}
+                      {field.question_type == "paragraph" && (
+                        <textarea
+                          rows={4}
+                          className="block h-10 w-full rounded-md px-5 shadow-sm"
+                          placeholder={field.label}
+                        />
+                      )}
+                      {field.question_type == "multichoice" && (
+                        <div className="my-4 flex flex-col space-y-2">
+                          <select className="block h-10 w-full rounded-md px-5 shadow-sm">
+                            {field.list.map((item) => (
+                              <option key={item} value={item}>
+                                {item}
+                              </option>
+                            ))}
+                          </select>
+                          <div className="space-between flex">
+                            <input
+                              type="text"
+                              placeholder="Add an option"
+                              className="flex-1"
+                            />
+                            <button className="block bg-indigo-700 px-4 text-white hover:bg-indigo-900">
+                              Add
+                            </button>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                );
               })}
 
               <div className="relative w-full p-5">
