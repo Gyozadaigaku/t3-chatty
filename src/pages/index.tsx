@@ -173,6 +173,54 @@ const Home: NextPage = () => {
                 </div>
               </div>
             </div>
+            <div className="my-4 flex w-full flex-col space-y-2">
+              <h1 className="text-2xl font-bold">Form Maker Preview</h1>
+              <h2 className="text-lg">Untitled Form</h2>
+            </div>
+            <div className="my-10 rounded-md bg-white p-5 shadow-lg">
+              {formContent.map((field) => {
+                return (
+                  <div>
+                    <div className="flex items-center justify-between space-y-2">
+                      <div
+                        key={field.name}
+                        className="block text-sm font-medium capitalize text-gray-700"
+                      >
+                        <label onClick={() => setOnEdit(true)}>
+                          {field.label}
+                        </label>
+                      </div>
+                    </div>
+
+                    <div className="my-4">
+                      {field.question_type == "short_answer" && (
+                        <input
+                          type="text"
+                          className="block h-10 w-full rounded-md px-5 shadow-sm"
+                          placeholder={field.label}
+                        />
+                      )}
+                      {field.question_type == "paragraph" && (
+                        <textarea
+                          rows={4}
+                          className="block h-10 w-full rounded-md px-5 shadow-sm"
+                          placeholder={field.label}
+                        />
+                      )}
+                      {field.question_type == "multichoice" && (
+                        <select className="block h-10 w-full rounded-md px-5 shadow-sm">
+                          {field.list.map((item) => (
+                            <option key={item} value={item}>
+                              {item}
+                            </option>
+                          ))}
+                        </select>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
           </div>
 
           <div className="flex flex-col items-center gap-2">
