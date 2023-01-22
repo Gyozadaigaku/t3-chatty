@@ -4,9 +4,21 @@ import Link from "next/link";
 import { signIn, signOut, useSession } from "next-auth/react";
 
 import { api } from "../utils/api";
+import { useState } from "react";
 
 const Home: NextPage = () => {
   const hello = api.example.hello.useQuery({ text: "from tRPC" });
+
+  const [formContent, setFormContent] = useState([]);
+  const addQuestion = () => {
+    const field = {
+      name: `question_${formContent.length}`,
+      label: "Untitled question",
+      question_type: "short_answer",
+      list: [],
+    };
+    setFormContent([...formContent, field]);
+  };
 
   return (
     <>
@@ -20,30 +32,30 @@ const Home: NextPage = () => {
           <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
             Create <span className="text-[hsl(280,100%,70%)]">T3</span> App
           </h1>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-8">
-            <Link
-              className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20"
-              href="https://create.t3.gg/en/usage/first-steps"
-              target="_blank"
-            >
-              <h3 className="text-2xl font-bold">First Steps →</h3>
-              <div className="text-lg">
-                Just the basics - Everything you need to know to set up your
-                database and authentication.
+
+          <div className="container mx-auto h-screen px-4">
+            <div className="my-4 flex w-full flex-col space-y-2">
+              <h1 className="text-2xl font-bold">Form Maker</h1>
+              <h2 className="text-lg">Untitled Form</h2>
+            </div>
+            <div className="my-10 rounded-md bg-white p-5 shadow-lg">
+              {formContent.map((field, index) => {
+                return <div key={index}>Test</div>;
+              })}
+
+              <div className="relative w-full p-5">
+                <div className="absolute inset-x-0 bottom-0 flex h-12 justify-center">
+                  <button
+                    onClick={() => addQuestion()}
+                    className="inline-flex items-center rounded-md bg-gray-800 p-3 text-sm text-white hover:bg-gray-700"
+                  >
+                    Add Question
+                  </button>
+                </div>
               </div>
-            </Link>
-            <Link
-              className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20"
-              href="https://create.t3.gg/en/introduction"
-              target="_blank"
-            >
-              <h3 className="text-2xl font-bold">Documentation →</h3>
-              <div className="text-lg">
-                Learn more about Create T3 App, the libraries it uses, and how
-                to deploy it.
-              </div>
-            </Link>
+            </div>
           </div>
+
           <div className="flex flex-col items-center gap-2">
             <p className="text-2xl text-white">
               {hello.data ? hello.data.greeting : "Loading tRPC query..."}
@@ -63,7 +75,7 @@ const AuthShowcase: React.FC = () => {
 
   const { data: secretMessage } = api.example.getSecretMessage.useQuery(
     undefined, // no input
-    { enabled: sessionData?.user !== undefined },
+    { enabled: sessionData?.user !== undefined }
   );
 
   return (
